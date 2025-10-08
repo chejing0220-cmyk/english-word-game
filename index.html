@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单词挑战赛 - 学生版</title>
+    <title>单词挑战赛 - 五单元单词测试</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -128,21 +128,6 @@
         .unit-btn.active {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.3);
-        }
-        
-        .player-list {
-            text-align: left;
-            margin: 20px 0;
-        }
-        
-        .player-item {
-            background: #f8f9fa;
-            margin: 10px 0;
-            padding: 12px 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            border-left: 4px solid #1a2a6c;
         }
         
         .question-container {
@@ -302,13 +287,20 @@
             box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
             outline: none;
         }
+        
+        .question-type {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1><i class="fas fa-language"></i> 单词挑战赛</h1>
-            <p class="subtitle">五个单元单词测试平台</p>
+            <p class="subtitle">五单元单词测试平台</p>
         </header>
         
         <div class="content">
@@ -350,7 +342,7 @@
                     
                     <div class="unit-info">
                         <h3>单元说明</h3>
-                        <p>每个单元包含20个核心单词，测试包含词义选择和情境填空两种题型，总分10分。</p>
+                        <p>每个单元包含20道题目，其中20%为词义选择题，80%为情境填空题，总分10分。</p>
                     </div>
                     
                     <div class="unit-selector">
@@ -375,6 +367,7 @@
                 </div>
                 
                 <div class="card question-container">
+                    <div class="question-type" id="question-type">题型: 词义选择</div>
                     <div id="question" class="question">问题加载中...</div>
                     <div id="options-container" class="options"></div>
                 </div>
@@ -388,7 +381,7 @@
                     
                     <div class="unit-info">
                         <h3>测试单元: <span id="result-unit">Unit 1</span></h3>
-                        <p id="result-unit-description">包含20个核心单词，涵盖复杂词汇、情感表达等主题。</p>
+                        <p id="result-unit-description">包含20道题目，其中20%为词义选择题，80%为情境填空题。</p>
                     </div>
                     
                     <h3>排行榜</h3>
@@ -406,8 +399,8 @@
         // 单词库定义 - 五个单元
         const wordUnits = {
             1: {
-                name: "Unit 1",
-                description: "包含20个核心单词，涵盖复杂词汇、情感表达等主题。",
+                name: "Unit 1 - 核心词汇与情感表达",
+                description: "包含20道题目，其中20%为词义选择题，80%为情境填空题。",
                 words: {
                     intricate: "复杂的；错综的",
                     invade: "入侵；侵略",
@@ -442,8 +435,8 @@
                 }
             },
             2: {
-                name: "Unit 2",
-                description: "包含20个单词，涵盖自然现象、社会生活和情感表达。",
+                name: "Unit 2 - 自然与社会生活",
+                description: "包含20道题目，其中20%为词义选择题，80%为情境填空题。",
                 words: {
                     Bangkok: "曼谷（泰国首都）",
                     barter: "易货贸易；以物易物",
@@ -488,8 +481,8 @@
                 }
             },
             3: {
-                name: "Unit 3",
-                description: "包含20个单词，涵盖人物特征、情感状态和情境描述。",
+                name: "Unit 3 - 人物与情境描述",
+                description: "包含20道题目，其中20%为词义选择题，80%为情境填空题。",
                 words: {
                     agent: "代理人；经纪人；特工",
                     armchair: "扶手椅",
@@ -541,8 +534,8 @@
                 }
             },
             4: {
-                name: "Unit 4",
-                description: "包含20个单词，涵盖自然景观、情感表达和诗意词汇。",
+                name: "Unit 4 - 自然与诗意表达",
+                description: "包含20道题目，其中20%为词义选择题，80%为情境填空题。",
                 words: {
                     bloom: "开花；繁荣",
                     blossom: "开花；兴旺",
@@ -609,8 +602,8 @@
                 }
             },
             5: {
-                name: "Unit 5",
-                description: "包含20个单词，涵盖抽象概念、日常生活和情感表达。",
+                name: "Unit 5 - 抽象概念与日常生活",
+                description: "包含20道题目，其中20%为词义选择题，80%为情境填空题。",
                 words: {
                     acceptance: "接受；认可",
                     armful: "一抱之量",
@@ -690,12 +683,12 @@
                 }
             }
             
-            selectedWords.forEach(word => {
+            selectedWords.forEach((word, index) => {
                 const definition = wordUnits[gameState.selectedUnit].words[word];
                 const otherWords = words.filter(w => w !== word);
                 
-                // 随机决定题型：50%选择题，50%填空题
-                if (Math.random() > 0.5) {
+                // 20%选择题，80%填空题
+                if (index < 4) { // 4/20 = 20%
                     // 选择题 - 词义选择
                     const options = [word];
                     while (options.length < 4) {
@@ -723,6 +716,7 @@
                 } else {
                     // 填空题 - 情境填空
                     const sentences = {
+                        // Unit 1 句子
                         intricate: "The watch had an <span class='blank'></span> mechanism with hundreds of tiny parts.",
                         invade: "The army planned to <span class='blank'></span> the neighboring country at dawn.",
                         irritated: "The constant noise made him feel <span class='blank'></span> and unable to concentrate.",
@@ -742,7 +736,132 @@
                         trace: "Archaeologists found <span class='blank'></span> of an ancient civilization.",
                         unclouded: "We enjoyed our picnic under an <span class='blank'></span> sky.",
                         vain: "He tried in <span class='blank'></span> to convince her to change her mind.",
-                        yell: "You don't need to <span class='blank'></span> - I can hear you perfectly well."
+                        yell: "You don't need to <span class='blank'></span> - I can hear you perfectly well.",
+                        
+                        // Unit 2 句子
+                        barter: "In ancient times, people would <span class='blank'></span> goods instead of using money.",
+                        breeze: "A gentle <span class='blank'></span> rustled the leaves of the trees.",
+                        complain: "He always finds something to <span class='blank'></span> about.",
+                        condemn: "The international community will <span class='blank'></span> this act of aggression.",
+                        dusk: "We went for a walk at <span class='blank'></span> when the sun was setting.",
+                        exhausted: "After running the marathon, he felt completely <span class='blank'></span>.",
+                        fertile: "The <span class='blank'></span> soil produced abundant crops.",
+                        greed: "His <span class='blank'></span> for power knew no bounds.",
+                        heal: "Time will <span class='blank'></span> your broken heart.",
+                        insult: "His rude comment was meant to <span class='blank'></span> her.",
+                        litter: "Please don't <span class='blank'></span> the park with your trash.",
+                        monk: "The <span class='blank'></span> spent his days in meditation and prayer.",
+                        pierce: "The needle will <span class='blank'></span> the fabric easily.",
+                        plough: "Farmers <span class='blank'></span> their fields in the spring.",
+                        reap: "You will <span class='blank'></span> what you sow.",
+                        replace: "We need to <span class='blank'></span> the old equipment with new models.",
+                        ripple: "A stone thrown into the pond will <span class='blank'></span> the water.",
+                        scarcity: "There is a <span class='blank'></span> of clean water in some regions.",
+                        shimmer: "The lake seemed to <span class='blank'></span> in the moonlight.",
+                        ungrateful: "It would be <span class='blank'></span> not to thank them for their help.",
+                        
+                        // Unit 3 句子
+                        agent: "The secret <span class='blank'></span> completed his mission successfully.",
+                        blink: "If you <span class='blank'></span> too much, your eyes might be dry.",
+                        bore: "His long speeches tend to <span class='blank'></span> the audience.",
+                        chuckle: "He couldn't help but <span class='blank'></span> at the funny joke.",
+                        commanding: "The general had a <span class='blank'></span> presence that inspired respect.",
+                        corridor: "She walked down the long <span class='blank'></span> to her office.",
+                        crack: "There was a loud <span class='blank'></span> of thunder during the storm.",
+                        disillusioned: "After the scandal, many voters felt <span class='blank'></span> with politics.",
+                        extend: "The company plans to <span class='blank'></span> its operations to Asia.",
+                        frustrated: "She felt <span class='blank'></span> when her computer crashed again.",
+                        gloomy: "The weather forecast is <span class='blank'></span> for the weekend.",
+                        halfway: "We're <span class='blank'></span> through the project and on schedule.",
+                        heavily: "It rained <span class='blank'></span> throughout the night.",
+                        murmur: "I could hear the <span class='blank'></span> of distant conversation.",
+                        mysterious: "The disappearance of the plane remains <span class='blank'></span>.",
+                        romantic: "They had a <span class='blank'></span> dinner by candlelight.",
+                        slender: "She had a <span class='blank'></span> figure and moved gracefully.",
+                        slip: "Be careful not to <span class='blank'></span> on the wet floor.",
+                        sloppy: "His <span class='blank'></span> work habits led to many mistakes.",
+                        stammer: "He would <span class='blank'></span> when he was nervous.",
+                        swiftly: "The cat moved <span class='blank'></span> to catch the mouse.",
+                        thrill: "The roller coaster ride gave me a real <span class='blank'></span>.",
+                        uncork: "He proceeded to <span class='blank'></span> the champagne bottle.",
+                        wheeze: "The old man would <span class='blank'></span> when he climbed stairs.",
+                        
+                        // Unit 4 句子
+                        bloom: "The roses will <span class='blank'></span> in early summer.",
+                        blossom: "The apple trees <span class='blank'></span> beautifully in spring.",
+                        bubble: "The water began to <span class='blank'></span> as it reached boiling point.",
+                        bud: "The rose <span class='blank'></span> will open in a few days.",
+                        chill: "The evening air began to <span class='blank'></span> as the sun set.",
+                        crimson: "Her cheeks turned <span class='blank'></span> with embarrassment.",
+                        crystal: "The <span class='blank'></span> clear water reflected the sky.",
+                        deny: "I cannot <span class='blank'></span> that I made a mistake.",
+                        dove: "A white <span class='blank'></span> is often a symbol of peace.",
+                        ebb: "The tide began to <span class='blank'></span> as evening approached.",
+                        ecstasy: "She was in <span class='blank'></span> when she heard the good news.",
+                        faint: "There was a <span class='blank'></span> smell of perfume in the room.",
+                        fling: "He would <span class='blank'></span> his arms wide when excited.",
+                        flush: "A <span class='blank'></span> of pink colored her cheeks.",
+                        flutter: "The flags <span class='blank'></span> in the gentle breeze.",
+                        foam: "The <span class='blank'></span> on the waves looked like whipped cream.",
+                        frown: "She would <span class='blank'></span> when concentrating deeply.",
+                        linger: "The smell of baking bread seemed to <span class='blank'></span> in the air.",
+                        marvelous: "The view from the mountain top was <span class='blank'></span>.",
+                        meadow: "The wildflowers covered the <span class='blank'></span> in a colorful carpet.",
+                        mermaid: "Children love stories about the beautiful <span class='blank'></span>.",
+                        mystery: "The disappearance of the ancient civilization remains a <span class='blank'></span>.",
+                        nightingale: "The song of the <span class='blank'></span> filled the moonlit garden.",
+                        oak: "The old <span class='blank'></span> tree had stood for centuries.",
+                        outright: "She rejected his proposal <span class='blank'></span>.",
+                        pang: "He felt a <span class='blank'></span> of regret for his harsh words.",
+                        petal: "Each rose <span class='blank'></span> was perfectly formed.",
+                        philosophy: "His personal <span class='blank'></span> was to live and let live.",
+                        pluck: "She had to <span class='blank'></span> up courage to speak in public.",
+                        ruby: "Her ring featured a large, deep red <span class='blank'></span>.",
+                        sincerity: "I appreciate the <span class='blank'></span> of your apology.",
+                        soar: "Eagles <span class='blank'></span> high above the mountains.",
+                        spray: "The ocean <span class='blank'></span> felt refreshing on a hot day.",
+                        thorn: "Be careful of the <span class='blank'></span> on that rose bush.",
+                        tomb: "The ancient <span class='blank'></span> contained many treasures.",
+                        wretched: "The refugees lived in <span class='blank'></span> conditions.",
+                        
+                        // Unit 5 句子
+                        acceptance: "Her <span class='blank'></span> of the award was gracious.",
+                        armful: "She carried an <span class='blank'></span> of books from the library.",
+                        assure: "I can <span class='blank'></span> you that everything will be fine.",
+                        casually: "He mentioned it <span class='blank'></span> in conversation.",
+                        chatter: "The children would <span class='blank'></span> excitedly about their day.",
+                        claim: "His <span class='blank'></span> to the throne was disputed.",
+                        collection: "She had an impressive <span class='blank'></span> of antique coins.",
+                        conscious: "He was <span class='blank'></span> of being watched.",
+                        consist: "The committee will <span class='blank'></span> of five members.",
+                        destination: "Our final <span class='blank'></span> was a small coastal village.",
+                        encounter: "Their chance <span class='blank'></span> led to a lifelong friendship.",
+                        formation: "The birds flew in a V-shaped <span class='blank'></span>.",
+                        genius: "Her solution to the problem was pure <span class='blank'></span>.",
+                        identity: "He had to prove his <span class='blank'></span> at the border.",
+                        ignorance: "<span class='blank'></span> of the law is no excuse.",
+                        inspect: "The health department will <span class='blank'></span> the restaurant.",
+                        instantly: "The pain disappeared <span class='blank'></span>.",
+                        leak: "The roof began to <span class='blank'></span> during the heavy rain.",
+                        locate: "We need to <span class='blank'></span> the source of the problem.",
+                        mechanic: "The <span class='blank'></span> fixed my car in just an hour.",
+                        melt: "The ice will <span class='blank'></span> quickly in the sun.",
+                        numerous: "There were <span class='blank'></span> reasons for his decision.",
+                        occasion: "This calls for a celebration on such a special <span class='blank'></span>.",
+                        particularly: "I'm <span class='blank'></span> interested in modern art.",
+                        pat: "He gave the dog a gentle <span class='blank'></span> on the head.",
+                        perspective: "Travel gives you a different <span class='blank'></span> on life.",
+                        pinnacle: "Winning the award was the <span class='blank'></span> of her career.",
+                        potential: "The young athlete showed great <span class='blank'></span>.",
+                        radiator: "The <span class='blank'></span> keeps the room warm in winter.",
+                        recognition: "She received <span class='blank'></span> for her charitable work.",
+                        region: "This wine comes from a famous grape-growing <span class='blank'></span>.",
+                        scattered: "His notes were <span class='blank'></span> all over the desk.",
+                        spout: "The whale can <span class='blank'></span> water high into the air.",
+                        steep: "The path up the mountain was very <span class='blank'></span>.",
+                        strain: "Don't <span class='blank'></span> your eyes by reading in poor light.",
+                        tease: "The children would <span class='blank'></span> him about his accent.",
+                        unexpected: "The party was an <span class='blank'></span> surprise for her."
                     };
                     
                     const sentence = sentences[word] || `The word "${word}" means ${definition}.`;
@@ -766,6 +885,12 @@
                     });
                 }
             });
+            
+            // 随机打乱题目顺序
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
             
             return questions;
         }
@@ -799,6 +924,10 @@
             document.getElementById('question').innerHTML = currentQuestion.question;
             document.getElementById('current-q').textContent = currentQuestionIndex + 1;
             document.getElementById('current-score').textContent = score;
+            
+            // 设置题型显示
+            document.getElementById('question-type').textContent = 
+                currentQuestion.type === 'choice' ? '题型: 词义选择' : '题型: 情境填空';
             
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
