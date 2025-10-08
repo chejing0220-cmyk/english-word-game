@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多单元单词挑战赛 - 互动学习平台</title>
+    <title>单词挑战赛 - 学生版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -25,7 +25,7 @@
         
         .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
@@ -94,11 +94,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         
-        .btn-teacher {
-            background: linear-gradient(135deg, #FF416C, #FF4B2B);
-        }
-        
-        .btn-student {
+        .btn-start {
             background: linear-gradient(135deg, #00b09b, #96c93d);
         }
         
@@ -132,28 +128,6 @@
         .unit-btn.active {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.3);
-        }
-        
-        .qr-container {
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            display: inline-block;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .qr-placeholder {
-            width: 200px;
-            height: 200px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #dee2e6;
-            border-radius: 10px;
-            margin: 0 auto;
-            color: #6c757d;
         }
         
         .player-list {
@@ -303,16 +277,6 @@
             margin: 0 5px;
         }
         
-        .url-box {
-            background: #f8f9fa;
-            color: #333;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            word-break: break-all;
-            font-size: 0.9em;
-        }
-        
         .unit-info {
             background: #e9f7fe;
             padding: 15px;
@@ -320,32 +284,45 @@
             margin: 15px 0;
             border-left: 4px solid #1a2a6c;
         }
+        
+        .name-input {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            border: 2px solid #dee2e6;
+            width: 80%;
+            max-width: 300px;
+            margin: 15px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .name-input:focus {
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+            outline: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-language"></i> 多单元单词挑战赛</h1>
-            <p class="subtitle">五个单元单词测试平台 - 支持多人互动</p>
+            <h1><i class="fas fa-language"></i> 单词挑战赛</h1>
+            <p class="subtitle">五个单元单词测试平台</p>
         </header>
         
         <div class="content">
             <!-- 欢迎屏幕 -->
             <div id="welcome-screen" class="screen">
                 <div class="card">
-                    <h2>欢迎来到多单元单词挑战赛</h2>
-                    <p>这是一个专为英语学习者设计的互动单词测试平台，包含五个单元的单词，支持多人同时参与。</p>
+                    <h2>欢迎来到单词挑战赛</h2>
+                    <p>这是一个专为英语学习者设计的互动单词测试平台，包含五个单元的单词。</p>
                     
                     <div class="feature-list">
                         <div class="feature">
                             <i class="fas fa-layer-group"></i>
                             <h3>五个单元</h3>
                             <p>涵盖五个不同主题的单词单元</p>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-qrcode"></i>
-                            <h3>扫码加入</h3>
-                            <p>老师生成二维码，学生扫码即可参与</p>
                         </div>
                         <div class="feature">
                             <i class="fas fa-gamepad"></i>
@@ -359,8 +336,9 @@
                         </div>
                     </div>
                     
-                    <button id="teacher-btn" class="btn btn-teacher"><i class="fas fa-chalkboard-teacher"></i> 我是老师</button>
-                    <button id="student-btn" class="btn btn-student"><i class="fas fa-user-graduate"></i> 我是学生</button>
+                    <input type="text" id="student-name" class="name-input" placeholder="请输入你的名字" maxlength="15">
+                    <br>
+                    <button id="start-game-btn" class="btn btn-start"><i class="fas fa-play"></i> 开始挑战</button>
                 </div>
             </div>
             
@@ -388,56 +366,6 @@
                 </div>
             </div>
             
-            <!-- 老师设置屏幕 -->
-            <div id="teacher-screen" class="screen">
-                <div class="card">
-                    <h2><i class="fas fa-chalkboard-teacher"></i> 创建游戏房间</h2>
-                    <p>让学生扫描下方二维码加入游戏</p>
-                    
-                    <div class="unit-info">
-                        <h3>当前测试单元: <span id="current-unit-display">Unit 1</span></h3>
-                        <p id="unit-description">包含20个核心单词，涵盖复杂词汇、情感表达等主题。</p>
-                    </div>
-                    
-                    <div class="qr-container">
-                        <div id="qrcode" class="qr-placeholder">
-                            <div>正在生成二维码...</div>
-                        </div>
-                    </div>
-                    
-                    <p>或复制链接分享：</p>
-                    <div class="url-box" id="game-url"></div>
-                    
-                    <div class="player-list">
-                        <h3>已加入玩家 (<span id="player-count">0</span>)</h3>
-                        <div id="players-list"></div>
-                    </div>
-                    
-                    <button id="start-game-btn" class="btn"><i class="fas fa-play"></i> 开始游戏</button>
-                    <button id="change-unit-btn" class="btn"><i class="fas fa-exchange-alt"></i> 更换单元</button>
-                    <button id="back-to-welcome2" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
-                </div>
-            </div>
-            
-            <!-- 学生加入屏幕 -->
-            <div id="student-screen" class="screen">
-                <div class="card">
-                    <h2><i class="fas fa-user-graduate"></i> 加入游戏</h2>
-                    <input type="text" id="student-name" placeholder="输入你的名字" maxlength="15" style="padding: 12px; width: 80%; max-width: 300px; border-radius: 50px; border: 2px solid #dee2e6; text-align: center; font-size: 1rem; margin: 10px 0;">
-                    <br>
-                    <button id="join-btn" class="btn"><i class="fas fa-sign-in-alt"></i> 加入游戏</button>
-                    <button id="back-to-welcome3" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
-                    
-                    <div id="waiting-message" style="display: none; margin-top: 20px;">
-                        <p>✅ 已成功加入，等待老师开始游戏...</p>
-                        <div class="player-list">
-                            <h3>已加入玩家</h3>
-                            <div id="student-players-list"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- 游戏屏幕 -->
             <div id="game-screen" class="screen">
                 <div class="progress-container">
@@ -456,7 +384,7 @@
             <div id="results-screen" class="screen">
                 <div class="card">
                     <h2><i class="fas fa-award"></i> 挑战结束!</h2>
-                    <p>你的最终得分是: <span id="final-score" class="score">0</span>/10</p>
+                    <p id="player-result">你的最终得分是: <span id="final-score" class="score">0</span>/10</p>
                     
                     <div class="unit-info">
                         <h3>测试单元: <span id="result-unit">Unit 1</span></h3>
@@ -467,27 +395,8 @@
                     <ul id="leaderboard" class="leaderboard"></ul>
                     
                     <button id="play-again-btn" class="btn"><i class="fas fa-redo"></i> 再玩一次</button>
-                    <button id="share-btn" class="btn"><i class="fas fa-share-alt"></i> 分享游戏</button>
                     <button id="change-unit-after-game" class="btn"><i class="fas fa-exchange-alt"></i> 更换单元</button>
-                </div>
-            </div>
-            
-            <!-- 分享屏幕 -->
-            <div id="share-screen" class="screen">
-                <div class="card">
-                    <h2><i class="fas fa-share-alt"></i> 分享游戏</h2>
-                    <p>扫描二维码分享给其他同学</p>
-                    
-                    <div class="qr-container">
-                        <div id="share-qrcode" class="qr-placeholder">
-                            <div>正在生成二维码...</div>
-                        </div>
-                    </div>
-                    
-                    <p>游戏链接：</p>
-                    <div class="url-box" id="share-url"></div>
-                    
-                    <button id="back-to-welcome4" class="btn"><i class="fas fa-home"></i> 返回首页</button>
+                    <button id="back-to-welcome-from-results" class="btn"><i class="fas fa-home"></i> 返回首页</button>
                 </div>
             </div>
         </div>
@@ -750,138 +659,21 @@
 
         // 游戏状态
         let gameState = {
-            players: [],
+            playerName: "",
+            selectedUnit: 1,
             currentQuestion: 0,
             isGameActive: false,
-            scores: {},
-            selectedUnit: 1
+            scores: {}
         };
 
         // 显示屏幕函数
         function showScreen(screenId) {
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('unit-select-screen').style.display = 'none';
-            document.getElementById('teacher-screen').style.display = 'none';
-            document.getElementById('student-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('results-screen').style.display = 'none';
-            document.getElementById('share-screen').style.display = 'none';
             
             document.getElementById(screenId).style.display = 'block';
-            
-            // 如果是老师界面，生成二维码
-            if (screenId === 'teacher-screen') {
-                setTimeout(() => {
-                    generateTeacherQRCode();
-                }, 100);
-            }
-            
-            // 如果是分享界面，生成分享二维码
-            if (screenId === 'share-screen') {
-                setTimeout(() => {
-                    generateShareQRCode();
-                }, 100);
-            }
-        }
-
-        // 为老师生成二维码
-        function generateTeacherQRCode() {
-            const gameUrl = window.location.href;
-            const gameUrlElement = document.getElementById('game-url');
-            
-            // 显示URL
-            gameUrlElement.textContent = gameUrl;
-            
-            // 生成二维码
-            generateSimpleQRCode(gameUrl, 'qrcode');
-            
-            // 更新单元信息显示
-            document.getElementById('current-unit-display').textContent = wordUnits[gameState.selectedUnit].name;
-            document.getElementById('unit-description').textContent = wordUnits[gameState.selectedUnit].description;
-        }
-
-        // 生成分享二维码
-        function generateShareQRCode() {
-            const gameUrl = window.location.href;
-            const shareUrlElement = document.getElementById('share-url');
-            
-            shareUrlElement.textContent = gameUrl;
-            generateSimpleQRCode(gameUrl, 'share-qrcode');
-        }
-
-        // 简单的二维码生成函数
-        function generateSimpleQRCode(text, elementId) {
-            const element = document.getElementById(elementId);
-            
-            // 清除之前的内容
-            element.innerHTML = '';
-            
-            // 创建一个canvas来绘制二维码
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const size = 180;
-            canvas.width = size;
-            canvas.height = size;
-            
-            // 绘制白色背景
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(0, 0, size, size);
-            
-            // 绘制二维码样式的内容
-            ctx.fillStyle = '#000000';
-            
-            // 简单的二维码模式 - 绘制方块
-            const data = text + '|' + Date.now(); // 添加时间戳确保唯一性
-            
-            for (let i = 0; i < data.length; i++) {
-                const charCode = data.charCodeAt(i);
-                
-                // 根据字符代码绘制图案
-                for (let j = 0; j < 8; j++) {
-                    if (charCode & (1 << j)) {
-                        const x = (i * 3 + (j % 3)) * 6;
-                        const y = Math.floor(i / 10) * 6 + Math.floor(j / 3) * 6;
-                        if (x < size && y < size) {
-                            ctx.fillRect(x, y, 4, 4);
-                        }
-                    }
-                }
-            }
-            
-            // 添加定位标记
-            ctx.fillRect(5, 5, 25, 25);
-            ctx.fillRect(size - 30, 5, 25, 25);
-            ctx.fillRect(5, size - 30, 25, 25);
-            
-            // 在中间添加文字
-            ctx.fillStyle = '#000000';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('单词挑战赛', size/2, size/2 + 4);
-            
-            element.appendChild(canvas);
-        }
-
-        // 更新玩家列表
-        function updatePlayersList() {
-            const playersList = document.getElementById('players-list');
-            const studentPlayersList = document.getElementById('student-players-list');
-            const playerCount = document.getElementById('player-count');
-            
-            playerCount.textContent = gameState.players.length;
-            
-            playersList.innerHTML = '';
-            studentPlayersList.innerHTML = '';
-            
-            gameState.players.forEach(player => {
-                const playerElement = document.createElement('div');
-                playerElement.className = 'player-item';
-                playerElement.innerHTML = `<span>${player.name}</span><span>等待中...</span>`;
-                playersList.appendChild(playerElement);
-                
-                const studentElement = playerElement.cloneNode(true);
-                studentPlayersList.appendChild(studentElement);
-            });
         }
 
         // 生成随机题目
@@ -1069,10 +861,9 @@
         function endGame() {
             // 保存成绩
             let leaderboard = JSON.parse(localStorage.getItem('wordGameLeaderboard')) || [];
-            const playerName = gameState.players[0]?.name || '玩家';
             
             leaderboard.push({ 
-                name: playerName, 
+                name: gameState.playerName, 
                 score: score,
                 unit: gameState.selectedUnit,
                 date: new Date().toLocaleDateString()
@@ -1083,6 +874,7 @@
             localStorage.setItem('wordGameLeaderboard', JSON.stringify(leaderboard));
             
             // 显示结果
+            document.getElementById('player-result').innerHTML = `<strong>${gameState.playerName}</strong>，你的最终得分是: <span id="final-score" class="score">${score}</span>/10`;
             document.getElementById('final-score').textContent = score;
             document.getElementById('result-unit').textContent = wordUnits[gameState.selectedUnit].name;
             document.getElementById('result-unit-description').textContent = wordUnits[gameState.selectedUnit].description;
@@ -1099,32 +891,22 @@
         }
 
         // 事件监听器
-        document.getElementById('teacher-btn').addEventListener('click', function() {
-            showScreen('unit-select-screen');
-        });
-
-        document.getElementById('student-btn').addEventListener('click', function() {
-            showScreen('student-screen');
+        document.getElementById('start-game-btn').addEventListener('click', function() {
+            const studentName = document.getElementById('student-name').value.trim();
+            if (studentName) {
+                gameState.playerName = studentName;
+                showScreen('unit-select-screen');
+            } else {
+                alert('请输入你的名字！');
+            }
         });
 
         document.getElementById('back-to-welcome').addEventListener('click', function() {
             showScreen('welcome-screen');
         });
 
-        document.getElementById('back-to-welcome2').addEventListener('click', function() {
+        document.getElementById('back-to-welcome-from-results').addEventListener('click', function() {
             showScreen('welcome-screen');
-        });
-
-        document.getElementById('back-to-welcome3').addEventListener('click', function() {
-            showScreen('welcome-screen');
-        });
-
-        document.getElementById('back-to-welcome4').addEventListener('click', function() {
-            showScreen('welcome-screen');
-        });
-
-        document.getElementById('change-unit-btn').addEventListener('click', function() {
-            showScreen('unit-select-screen');
         });
 
         document.getElementById('change-unit-after-game').addEventListener('click', function() {
@@ -1151,40 +933,13 @@
         });
 
         document.getElementById('confirm-unit-btn').addEventListener('click', function() {
-            showScreen('teacher-screen');
-        });
-
-        document.getElementById('join-btn').addEventListener('click', function() {
-            const studentName = document.getElementById('student-name').value.trim();
-            if (studentName) {
-                gameState.players.push({
-                    id: Date.now().toString(),
-                    name: studentName,
-                    score: 0
-                });
-                updatePlayersList();
-                document.getElementById('waiting-message').style.display = 'block';
-            } else {
-                alert('请输入你的名字！');
-            }
-        });
-
-        document.getElementById('start-game-btn').addEventListener('click', function() {
-            if (gameState.players.length > 0) {
-                showScreen('game-screen');
-                startSinglePlayerGame();
-            } else {
-                alert('请等待至少一名玩家加入！');
-            }
+            showScreen('game-screen');
+            startSinglePlayerGame();
         });
 
         document.getElementById('play-again-btn').addEventListener('click', function() {
             showScreen('game-screen');
             startSinglePlayerGame();
-        });
-
-        document.getElementById('share-btn').addEventListener('click', function() {
-            showScreen('share-screen');
         });
 
         // 初始化
