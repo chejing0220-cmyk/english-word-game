@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单词挑战赛 - 多人互动平台</title>
+    <title>多单元单词挑战赛 - 互动学习平台</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #333;
             min-height: 100vh;
             display: flex;
@@ -25,7 +25,7 @@
         
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
@@ -34,7 +34,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             color: white;
             padding: 25px;
             text-align: center;
@@ -76,7 +76,7 @@
         
         .btn {
             display: inline-block;
-            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -95,11 +95,43 @@
         }
         
         .btn-teacher {
-            background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
         }
         
         .btn-student {
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+        
+        .unit-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .unit-btn {
+            background: linear-gradient(135deg, #fdbb2d, #b21f1f);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+            max-width: 180px;
+        }
+        
+        .unit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .unit-btn.active {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.3);
         }
         
         .qr-container {
@@ -136,7 +168,7 @@
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
-            border-left: 4px solid #2575fc;
+            border-left: 4px solid #1a2a6c;
         }
         
         .question-container {
@@ -193,7 +225,7 @@
         .timer {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #2575fc;
+            color: #1a2a6c;
         }
         
         .score {
@@ -218,7 +250,7 @@
         
         .leaderboard .rank {
             font-weight: bold;
-            color: #2575fc;
+            color: #1a2a6c;
         }
         
         .feature-list {
@@ -241,13 +273,13 @@
         
         .feature i {
             font-size: 2.5rem;
-            color: #2575fc;
+            color: #1a2a6c;
             margin-bottom: 15px;
         }
         
         .feature h3 {
             margin-bottom: 10px;
-            color: #2575fc;
+            color: #1a2a6c;
         }
         
         @media (max-width: 768px) {
@@ -258,12 +290,16 @@
             .feature {
                 min-width: 100%;
             }
+            
+            .unit-btn {
+                min-width: 120px;
+            }
         }
         
         .blank {
             display: inline-block;
             min-width: 100px;
-            border-bottom: 2px solid #2575fc;
+            border-bottom: 2px solid #1a2a6c;
             margin: 0 5px;
         }
         
@@ -276,23 +312,36 @@
             word-break: break-all;
             font-size: 0.9em;
         }
+        
+        .unit-info {
+            background: #e9f7fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #1a2a6c;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-language"></i> 单词挑战赛</h1>
-            <p class="subtitle">多人互动单词测试平台</p>
+            <h1><i class="fas fa-language"></i> 多单元单词挑战赛</h1>
+            <p class="subtitle">五个单元单词测试平台 - 支持多人互动</p>
         </header>
         
         <div class="content">
             <!-- 欢迎屏幕 -->
             <div id="welcome-screen" class="screen">
                 <div class="card">
-                    <h2>欢迎来到单词挑战赛</h2>
-                    <p>这是一个专为英语学习者设计的互动单词测试平台，支持多人同时参与。</p>
+                    <h2>欢迎来到多单元单词挑战赛</h2>
+                    <p>这是一个专为英语学习者设计的互动单词测试平台，包含五个单元的单词，支持多人同时参与。</p>
                     
                     <div class="feature-list">
+                        <div class="feature">
+                            <i class="fas fa-layer-group"></i>
+                            <h3>五个单元</h3>
+                            <p>涵盖五个不同主题的单词单元</p>
+                        </div>
                         <div class="feature">
                             <i class="fas fa-qrcode"></i>
                             <h3>扫码加入</h3>
@@ -315,11 +364,40 @@
                 </div>
             </div>
             
+            <!-- 单元选择屏幕 -->
+            <div id="unit-select-screen" class="screen">
+                <div class="card">
+                    <h2><i class="fas fa-layer-group"></i> 选择测试单元</h2>
+                    <p>请选择要测试的单词单元</p>
+                    
+                    <div class="unit-info">
+                        <h3>单元说明</h3>
+                        <p>每个单元包含20个核心单词，测试包含词义选择和情境填空两种题型，总分10分。</p>
+                    </div>
+                    
+                    <div class="unit-selector">
+                        <button class="unit-btn" data-unit="1">Unit 1</button>
+                        <button class="unit-btn" data-unit="2">Unit 2</button>
+                        <button class="unit-btn" data-unit="3">Unit 3</button>
+                        <button class="unit-btn" data-unit="4">Unit 4</button>
+                        <button class="unit-btn" data-unit="5">Unit 5</button>
+                    </div>
+                    
+                    <button id="confirm-unit-btn" class="btn" disabled><i class="fas fa-check"></i> 确认选择</button>
+                    <button id="back-to-welcome" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
+                </div>
+            </div>
+            
             <!-- 老师设置屏幕 -->
             <div id="teacher-screen" class="screen">
                 <div class="card">
                     <h2><i class="fas fa-chalkboard-teacher"></i> 创建游戏房间</h2>
                     <p>让学生扫描下方二维码加入游戏</p>
+                    
+                    <div class="unit-info">
+                        <h3>当前测试单元: <span id="current-unit-display">Unit 1</span></h3>
+                        <p id="unit-description">包含20个核心单词，涵盖复杂词汇、情感表达等主题。</p>
+                    </div>
                     
                     <div class="qr-container">
                         <div id="qrcode" class="qr-placeholder">
@@ -336,7 +414,8 @@
                     </div>
                     
                     <button id="start-game-btn" class="btn"><i class="fas fa-play"></i> 开始游戏</button>
-                    <button id="back-to-welcome" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
+                    <button id="change-unit-btn" class="btn"><i class="fas fa-exchange-alt"></i> 更换单元</button>
+                    <button id="back-to-welcome2" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
                 </div>
             </div>
             
@@ -347,7 +426,7 @@
                     <input type="text" id="student-name" placeholder="输入你的名字" maxlength="15" style="padding: 12px; width: 80%; max-width: 300px; border-radius: 50px; border: 2px solid #dee2e6; text-align: center; font-size: 1rem; margin: 10px 0;">
                     <br>
                     <button id="join-btn" class="btn"><i class="fas fa-sign-in-alt"></i> 加入游戏</button>
-                    <button id="back-to-welcome2" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
+                    <button id="back-to-welcome3" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
                     
                     <div id="waiting-message" style="display: none; margin-top: 20px;">
                         <p>✅ 已成功加入，等待老师开始游戏...</p>
@@ -379,11 +458,17 @@
                     <h2><i class="fas fa-award"></i> 挑战结束!</h2>
                     <p>你的最终得分是: <span id="final-score" class="score">0</span>/10</p>
                     
+                    <div class="unit-info">
+                        <h3>测试单元: <span id="result-unit">Unit 1</span></h3>
+                        <p id="result-unit-description">包含20个核心单词，涵盖复杂词汇、情感表达等主题。</p>
+                    </div>
+                    
                     <h3>排行榜</h3>
                     <ul id="leaderboard" class="leaderboard"></ul>
                     
                     <button id="play-again-btn" class="btn"><i class="fas fa-redo"></i> 再玩一次</button>
                     <button id="share-btn" class="btn"><i class="fas fa-share-alt"></i> 分享游戏</button>
+                    <button id="change-unit-after-game" class="btn"><i class="fas fa-exchange-alt"></i> 更换单元</button>
                 </div>
             </div>
             
@@ -402,61 +487,265 @@
                     <p>游戏链接：</p>
                     <div class="url-box" id="share-url"></div>
                     
-                    <button id="back-to-welcome3" class="btn"><i class="fas fa-home"></i> 返回首页</button>
+                    <button id="back-to-welcome4" class="btn"><i class="fas fa-home"></i> 返回首页</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 单词库定义
-        const wordDefinitions = {
-            border: "边界；边境",
-            circus: "马戏团",
-            cling: "紧贴；附着",
-            clown: "小丑",
-            clutch: "紧握；抓住",
-            conjurer: "魔术师",
-            creator: "创造者",
-            crossroads: "十字路口",
-            curiosity: "好奇心",
-            daze: "使眩晕；使茫然",
-            exceedingly: "非常；极其",
-            exertion: "努力；费力",
-            fortress: "堡垒；要塞",
-            grim: "严肃的；严峻的",
-            halt: "停止；中止",
-            hatred: "憎恨；厌恶",
-            intricate: "复杂的；错综的",
-            invade: "入侵；侵略",
-            irritated: "恼怒的；烦躁的",
-            joyfully: "快乐地；高兴地",
-            lift: "举起；提升",
-            lord: "君主；贵族",
-            misgivings: "疑虑；担忧",
-            nap: "小睡；打盹",
-            observant: "善于观察的；机警的",
-            overlook: "俯瞰；忽视",
-            palm: "手掌",
-            paradise: "天堂；乐园",
-            perseverance: "毅力；坚持不懈",
-            prickly: "多刺的；易怒的",
-            rank: "等级；排名",
-            resort: "度假胜地；诉诸",
-            revolve: "旋转；绕转",
-            rivalry: "竞争；对抗",
-            scold: "责骂；训斥",
-            sort: "种类；分类",
-            spin: "旋转",
-            startled: "吃惊的；受惊的",
-            stern: "严厉的；严格的",
-            stretch: "伸展；延伸",
-            sweetheart: "心上人；亲爱的",
-            tarboosh: "土耳其帽",
-            trace: "踪迹；痕迹",
-            unclouded: "晴朗的；明朗的",
-            vain: "徒劳的；虚荣的",
-            yell: "叫喊；大喊"
+        // 单词库定义 - 五个单元
+        const wordUnits = {
+            1: {
+                name: "Unit 1 - 核心词汇与情感表达",
+                description: "包含20个核心单词，涵盖复杂词汇、情感表达等主题。",
+                words: {
+                    intricate: "复杂的；错综的",
+                    invade: "入侵；侵略",
+                    irritated: "恼怒的；烦躁的",
+                    joyfully: "快乐地；高兴地",
+                    lift: "举起；提升",
+                    lord: "主人；君主",
+                    misgivings: "疑虑；担忧",
+                    nap: "小睡；打盹",
+                    observant: "善于观察的；机警的",
+                    overlook: "忽视；俯瞰",
+                    palm: "手掌；棕榈树",
+                    paradise: "天堂；乐园",
+                    perseverance: "毅力；坚持不懈",
+                    prickly: "多刺的；刺痛的",
+                    rank: "等级；军衔",
+                    resort: "求助；诉诸",
+                    revolve: "旋转；循环",
+                    rivalry: "竞争；对抗",
+                    scold: "责骂；斥责",
+                    sort: "种类；类别",
+                    spin: "旋转；纺纱",
+                    startled: "吃惊的；受惊的",
+                    stern: "严厉的；严格的",
+                    stretch: "伸展；延伸",
+                    sweetheart: "心上人；亲爱的",
+                    tarboosh: "塔布什帽（中东地区男子戴的无边圆顶帽）",
+                    trace: "痕迹；踪迹",
+                    unclouded: "晴朗的；清晰的",
+                    vain: "徒劳的；虚荣的",
+                    yell: "大喊；吼叫"
+                }
+            },
+            2: {
+                name: "Unit 2 - 自然与社会生活",
+                description: "包含20个单词，涵盖自然现象、社会生活和情感表达。",
+                words: {
+                    Bangkok: "曼谷（泰国首都）",
+                    barter: "易货贸易；以物易物",
+                    breeze: "微风；和风",
+                    buffalo: "水牛；野牛",
+                    complain: "抱怨；投诉",
+                    condemn: "谴责；判刑",
+                    crab: "螃蟹",
+                    craft: "工艺；手艺；航空器",
+                    dusk: "黄昏；傍晚",
+                    employment: "就业；雇用",
+                    evil: "邪恶；罪恶",
+                    exhausted: "筋疲力尽的；耗尽的",
+                    fertile: "肥沃的；多产的",
+                    forefathers: "祖先；先辈",
+                    gardener: "园丁；花匠",
+                    greed: "贪婪；贪欲",
+                    hairdresser: "理发师；美发师",
+                    heal: "治愈；痊愈；使和解",
+                    infancy: "婴儿期；初期",
+                    insult: "侮辱；冒犯",
+                    litter: "乱扔；使凌乱",
+                    lust: "欲望；渴望",
+                    monk: "僧侣；修道士",
+                    pierce: "刺穿；穿透",
+                    plough: "犁；耕",
+                    reap: "收割；收获",
+                    replace: "取代；替换",
+                    ripen: "成熟；使成熟",
+                    ripple: "泛起涟漪；使波动",
+                    scarcity: "缺乏；不足",
+                    scent: "气味；香味",
+                    sheaf: "捆；束",
+                    shimmer: "闪烁；微微发亮",
+                    sickness: "疾病；不健康",
+                    strip: "脱光；剥夺",
+                    surely: "当然；无疑",
+                    textile: "纺织品；织物",
+                    till: "耕种；直到",
+                    toe: "用脚尖走；脚趾",
+                    ungrateful: "忘恩负义的；不领情的"
+                }
+            },
+            3: {
+                name: "Unit 3 - 人物与情境描述",
+                description: "包含20个单词，涵盖人物特征、情感状态和情境描述。",
+                words: {
+                    agent: "代理人；经纪人；特工",
+                    armchair: "扶手椅",
+                    blackly: "黑暗地；阴险地",
+                    blink: "眨眼；闪烁",
+                    bore: "使厌烦；钻孔",
+                    Boston: "波士顿（美国城市）",
+                    chuckle: "轻声笑；窃笑",
+                    commanding: "指挥的；威严的",
+                    concerning: "关于；涉及",
+                    confounded: "困惑的；混淆的；该死的",
+                    corridor: "走廊；通道",
+                    crack: "裂缝；裂纹；噼啪声",
+                    devil: "魔鬼；恶棍",
+                    disillusioned: "醒悟的；不再抱幻想的",
+                    doorknob: "门把手",
+                    drama: "戏剧；剧本；戏剧性事件",
+                    espionage: "间谍活动；谍报",
+                    evilly: "邪恶地；狠毒地",
+                    explanatorily: "解释性地；说明性地",
+                    extend: "延伸；扩展；延长",
+                    frustrated: "懊恼的；沮丧的",
+                    gloomy: "阴暗的；忧郁的",
+                    grimly: "冷酷地；严厉地",
+                    halfway: "半途；在中途",
+                    heavily: "沉重地；大量地",
+                    management: "管理；经营；管理层",
+                    moodily: "情绪低落地；易怒地",
+                    murmur: "低语；喃喃自语",
+                    mysterious: "神秘的；不可思议的",
+                    Paris: "巴黎（法国首都）",
+                    passably: "尚可地；还过得去地",
+                    passkey: "万能钥匙；总钥匙",
+                    pistol: "手枪",
+                    romantic: "浪漫的；爱情的",
+                    shrilly: "尖锐地；刺耳地",
+                    sill: "窗台；门槛",
+                    slender: "苗条的；细长的",
+                    slip: "滑倒；滑落；溜走",
+                    sloppy: "马虎的；邋遢的；泥泞的",
+                    stammer: "口吃；结巴",
+                    stiffly: "僵硬地；生硬地",
+                    swiftly: "迅速地；敏捷地",
+                    thrill: "激动；震颤；兴奋",
+                    tray: "托盘；浅盘",
+                    uncork: "拔去瓶塞；泄漏",
+                    wheeze: "喘息；气喘",
+                    wheezily: "喘息地；气喘地"
+                }
+            },
+            4: {
+                name: "Unit 4 - 自然与诗意表达",
+                description: "包含20个单词，涵盖自然景观、情感表达和诗意词汇。",
+                words: {
+                    bloom: "开花；繁荣",
+                    blossom: "开花；兴旺",
+                    bridegroom: "新郎",
+                    bubble: "冒泡；沸腾",
+                    bud: "芽；花蕾",
+                    cartwheel: "侧手翻；车轮",
+                    chamberlain: "管家；宫廷大臣",
+                    chill: "使变冷；使放松",
+                    coral: "珊瑚；珊瑚色",
+                    crimson: "深红色的；绯红的",
+                    crystal: "水晶；晶体",
+                    cynic: "愤世嫉俗者；怀疑论者",
+                    daffodil: "水仙花",
+                    daisy: "雏菊",
+                    deny: "否认；拒绝",
+                    dove: "鸽子",
+                    ebb: "退潮；衰退",
+                    ecstasy: "狂喜；入迷",
+                    emerald: "祖母绿；翡翠",
+                    faint: "微弱的；模糊的；头晕的",
+                    fling: "猛扔；放肆",
+                    flush: "脸红；冲洗",
+                    flutter: "飘动；拍翅",
+                    foam: "泡沫；泡沫材料",
+                    frown: "皱眉；蹙额",
+                    gallery: "画廊；走廊",
+                    girdle: "腰带；围绕物",
+                    grove: "小树林；果园",
+                    gutter: "排水沟；槽",
+                    harp: "竖琴",
+                    jewel: "宝石；珠宝",
+                    lean: "倾斜；倚靠",
+                    linger: "徘徊；逗留",
+                    lizard: "蜥蜴",
+                    marvelous: "非凡的；不可思议的",
+                    meadow: "草地；牧场",
+                    mermaid: "美人鱼",
+                    metaphysics: "形而上学；玄学",
+                    mystery: "神秘；谜",
+                    nightingale: "夜莺",
+                    nip: "捏；夹；剪断",
+                    oak: "橡树；橡木",
+                    opal: "蛋白石；猫眼石",
+                    outright: "完全地；彻底地；直率地",
+                    pang: "剧痛；阵痛；悲痛",
+                    petal: "花瓣",
+                    philosophy: "哲学；哲理；人生观",
+                    pluck: "拔；扯；采摘；鼓起（勇气）",
+                    ruby: "红宝石；红宝石色",
+                    sincerity: "真诚；诚挚；真实",
+                    soar: "翱翔；高飞；猛增",
+                    spray: "喷雾；浪花；喷剂",
+                    stringed: "有弦的",
+                    sunbeam: "阳光光束；快乐的人",
+                    sundial: "日晷",
+                    thorn: "刺；荆棘；带刺植物",
+                    tomb: "坟墓；墓穴",
+                    topmost: "最高的；顶端的",
+                    unpractical: "不切实际的；不实用的",
+                    vein: "静脉；血管；叶脉；纹理",
+                    want: "缺乏；贫困；需要的东西",
+                    wretched: "可怜的；悲惨的；令人苦恼的"
+                }
+            },
+            5: {
+                name: "Unit 5 - 抽象概念与日常生活",
+                description: "包含20个单词，涵盖抽象概念、日常生活和情感表达。",
+                words: {
+                    acceptance: "接受；认可",
+                    armful: "一抱之量",
+                    assure: "使确信；保证",
+                    Brazil: "巴西",
+                    casually: "随意地；偶然地",
+                    chatter: "喋喋不休；闲聊",
+                    claim: "声称；索赔；要求",
+                    collection: "收集；集合；收藏品",
+                    conscious: "有意识的；清醒的；自觉的",
+                    consist: "由……组成；在于",
+                    destination: "目的地；终点",
+                    encounter: "相遇；邂逅；遭遇",
+                    fine: "美好的；精致的；晴朗的",
+                    formation: "形成；构成；编队",
+                    genius: "天才；天赋",
+                    identity: "身份；同一性",
+                    ignorance: "无知；愚昧",
+                    inspect: "检查；视察",
+                    instantly: "立即；马上",
+                    jacket: "夹克；短上衣",
+                    leak: "泄漏；渗漏",
+                    locate: "定位；查找……的地点",
+                    mechanic: "机械师；技工",
+                    melt: "融化；溶解",
+                    numerous: "众多的；许多的",
+                    occasion: "场合；时机；机会",
+                    particularly: "尤其；特别",
+                    pat: "轻拍；抚摸",
+                    perspective: "视角；观点；远景",
+                    pinnacle: "顶峰；顶点",
+                    potential: "潜力；可能性",
+                    radiator: "散热器；暖气片",
+                    recognition: "认出；识别；认可",
+                    region: "地区；区域",
+                    Rio: "里约（如里约热内卢）",
+                    scattered: "分散的；散乱的",
+                    spout: "喷出；滔滔不绝地讲",
+                    steep: "陡峭的；急剧的",
+                    strain: "拉紧；拉伤；使承受压力",
+                    tease: "取笑；逗弄；梳理（毛发）",
+                    unexpected: "意外的；想不到的"
+                }
+            }
         };
 
         // 游戏状态
@@ -464,12 +753,14 @@
             players: [],
             currentQuestion: 0,
             isGameActive: false,
-            scores: {}
+            scores: {},
+            selectedUnit: 1
         };
 
         // 显示屏幕函数
         function showScreen(screenId) {
             document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('unit-select-screen').style.display = 'none';
             document.getElementById('teacher-screen').style.display = 'none';
             document.getElementById('student-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'none';
@@ -503,6 +794,10 @@
             
             // 生成二维码
             generateSimpleQRCode(gameUrl, 'qrcode');
+            
+            // 更新单元信息显示
+            document.getElementById('current-unit-display').textContent = wordUnits[gameState.selectedUnit].name;
+            document.getElementById('unit-description').textContent = wordUnits[gameState.selectedUnit].description;
         }
 
         // 生成分享二维码
@@ -591,12 +886,12 @@
 
         // 生成随机题目
         function generateQuestions() {
-            const words = Object.keys(wordDefinitions);
+            const words = Object.keys(wordUnits[gameState.selectedUnit].words);
             const questions = [];
             const selectedWords = [];
             
             // 随机选择20个单词
-            while (selectedWords.length < 20) {
+            while (selectedWords.length < 20 && selectedWords.length < words.length) {
                 const randomWord = words[Math.floor(Math.random() * words.length)];
                 if (!selectedWords.includes(randomWord)) {
                     selectedWords.push(randomWord);
@@ -604,7 +899,7 @@
             }
             
             selectedWords.forEach(word => {
-                const definition = wordDefinitions[word];
+                const definition = wordUnits[gameState.selectedUnit].words[word];
                 const otherWords = words.filter(w => w !== word);
                 
                 // 随机决定题型：50%选择题，50%填空题
@@ -636,51 +931,26 @@
                 } else {
                     // 填空题 - 情境填空
                     const sentences = {
-                        border: "The river forms the natural <span class='blank'></span> between the two countries.",
-                        circus: "Children love to see the animals and acrobats at the <span class='blank'></span>.",
-                        cling: "The wet shirt will <span class='blank'></span> to your skin.",
-                        clutch: "She had to <span class='blank'></span> the railing to avoid falling.",
-                        conjurer: "The <span class='blank'></span> made a rabbit appear from his hat.",
-                        creator: "As the <span class='blank'></span> of this invention, he became famous.",
-                        crossroads: "At the <span class='blank'></span>, you need to turn left.",
-                        curiosity: "Her <span class='blank'></span> led her to explore the mysterious cave.",
-                        daze: "The bright lights will <span class='blank'></span> the drivers at night.",
-                        exceedingly: "The movie was <span class='blank'></span> boring and I fell asleep.",
-                        exertion: "After the <span class='blank'></span> of climbing the mountain, he rested.",
-                        fortress: "The ancient <span class='blank'></span> protected the city from enemies.",
-                        grim: "His <span class='blank'></span> expression showed he was not happy.",
-                        halt: "The officer ordered the troops to <span class='blank'></span> immediately.",
-                        hatred: "She looked at him with pure <span class='blank'></span> in her eyes.",
-                        intricate: "The <span class='blank'></span> design of the jewelry amazed everyone.",
-                        invade: "The army planned to <span class='blank'></span> the neighboring country.",
-                        irritated: "The constant noise made him feel <span class='blank'></span>.",
-                        joyfully: "The children <span class='blank'></span> played in the park.",
-                        lift: "Can you help me <span class='blank'></span> this heavy box?",
-                        lord: "The <span class='blank'></span> of the castle welcomed his guests.",
-                        misgivings: "I have some <span class='blank'></span> about this plan.",
-                        nap: "I usually take a short <span class='blank'></span> after lunch.",
-                        observant: "An <span class='blank'></span> person notices small details.",
-                        overlook: "From this hill, you can <span class='blank'></span> the whole valley.",
-                        palm: "He held the small bird in the <span class='blank'></span> of his hand.",
-                        paradise: "The tropical island was like <span class='blank'></span> on earth.",
-                        perseverance: "With great <span class='blank'></span>, she finally succeeded.",
-                        prickly: "Be careful with that <span class='blank'></span> cactus.",
-                        rank: "He achieved the highest <span class='blank'></span> in the army.",
-                        resort: "We went to a beach <span class='blank'></span> for our vacation.",
-                        revolve: "The planets <span class='blank'></span> around the sun.",
-                        rivalry: "There is strong <span class='blank'></span> between the two teams.",
-                        scold: "Mother will <span class='blank'></span> you if you break the vase.",
-                        sort: "What <span class='blank'></span> of music do you like?",
-                        spin: "The dancer began to <span class='blank'></span> around gracefully.",
-                        startled: "The loud noise <span class='blank'></span> the sleeping baby.",
-                        stern: "The teacher gave us a <span class='blank'></span> warning.",
-                        stretch: "You should <span class='blank'></span> your muscles before exercise.",
-                        sweetheart: "He called his wife his <span class='blank'></span>.",
-                        tarboosh: "He wore a traditional red <span class='blank'></span> on his head.",
-                        trace: "There was no <span class='blank'></span> of the missing documents.",
-                        unclouded: "We enjoyed the picnic under an <span class='blank'></span> sky.",
-                        vain: "He tried in <span class='blank'></span> to repair the broken watch.",
-                        yell: "Don't <span class='blank'></span> at me, I can hear you perfectly."
+                        intricate: "The watch had an <span class='blank'></span> mechanism with hundreds of tiny parts.",
+                        invade: "The army planned to <span class='blank'></span> the neighboring country at dawn.",
+                        irritated: "The constant noise made him feel <span class='blank'></span> and unable to concentrate.",
+                        joyfully: "The children <span class='blank'></span> ran towards the ice cream truck.",
+                        lift: "Can you help me <span class='blank'></span> this heavy box onto the shelf?",
+                        overlook: "From my hotel room, I could <span class='blank'></span> the entire city.",
+                        paradise: "The tropical island was like <span class='blank'></span> with its white beaches and clear water.",
+                        perseverance: "With great <span class='blank'></span>, she finally completed the difficult project.",
+                        prickly: "Be careful with that <span class='blank'></span> cactus in the corner.",
+                        resort: "When negotiations failed, they had to <span class='blank'></span> to legal action.",
+                        revolve: "The planets <span class='blank'></span> around the sun in elliptical orbits.",
+                        rivalry: "There was intense <span class='blank'></span> between the two soccer teams.",
+                        scold: "The teacher had to <span class='blank'></span> the students for being late.",
+                        spin: "The dancer began to <span class='blank'></span> around gracefully on the stage.",
+                        startled: "The loud thunder <span class='blank'></span> the sleeping baby.",
+                        stretch: "You should <span class='blank'></span> your muscles before exercising.",
+                        trace: "Archaeologists found <span class='blank'></span> of an ancient civilization.",
+                        unclouded: "We enjoyed our picnic under an <span class='blank'></span> sky.",
+                        vain: "He tried in <span class='blank'></span> to convince her to change her mind.",
+                        yell: "You don't need to <span class='blank'></span> - I can hear you perfectly well."
                     };
                     
                     const sentence = sentences[word] || `The word "${word}" means ${definition}.`;
@@ -804,6 +1074,7 @@
             leaderboard.push({ 
                 name: playerName, 
                 score: score,
+                unit: gameState.selectedUnit,
                 date: new Date().toLocaleDateString()
             });
             
@@ -813,12 +1084,14 @@
             
             // 显示结果
             document.getElementById('final-score').textContent = score;
+            document.getElementById('result-unit').textContent = wordUnits[gameState.selectedUnit].name;
+            document.getElementById('result-unit-description').textContent = wordUnits[gameState.selectedUnit].description;
             
             const leaderboardElement = document.getElementById('leaderboard');
             leaderboardElement.innerHTML = '';
             leaderboard.forEach((player, index) => {
                 const li = document.createElement('li');
-                li.innerHTML = `<span><span class="rank">${index + 1}.</span> ${player.name}</span><span class="score">${player.score}/10</span>`;
+                li.innerHTML = `<span><span class="rank">${index + 1}.</span> ${player.name} (${wordUnits[player.unit].name})</span><span class="score">${player.score}/10</span>`;
                 leaderboardElement.appendChild(li);
             });
             
@@ -827,7 +1100,7 @@
 
         // 事件监听器
         document.getElementById('teacher-btn').addEventListener('click', function() {
-            showScreen('teacher-screen');
+            showScreen('unit-select-screen');
         });
 
         document.getElementById('student-btn').addEventListener('click', function() {
@@ -844,6 +1117,41 @@
 
         document.getElementById('back-to-welcome3').addEventListener('click', function() {
             showScreen('welcome-screen');
+        });
+
+        document.getElementById('back-to-welcome4').addEventListener('click', function() {
+            showScreen('welcome-screen');
+        });
+
+        document.getElementById('change-unit-btn').addEventListener('click', function() {
+            showScreen('unit-select-screen');
+        });
+
+        document.getElementById('change-unit-after-game').addEventListener('click', function() {
+            showScreen('unit-select-screen');
+        });
+
+        // 单元选择
+        document.querySelectorAll('.unit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.unit-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // 为当前按钮添加active类
+                this.classList.add('active');
+                
+                // 启用确认按钮
+                document.getElementById('confirm-unit-btn').disabled = false;
+                
+                // 保存选择的单元
+                gameState.selectedUnit = parseInt(this.getAttribute('data-unit'));
+            });
+        });
+
+        document.getElementById('confirm-unit-btn').addEventListener('click', function() {
+            showScreen('teacher-screen');
         });
 
         document.getElementById('join-btn').addEventListener('click', function() {
