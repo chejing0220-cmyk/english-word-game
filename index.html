@@ -3,67 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单词挑战赛 | 多人版</title>
+    <title>单词挑战赛 - 多人互动平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 所有样式代码保持不变，这里为了简洁省略 */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; }
-        .container { background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); max-width: 700px; width: 90%; }
-        /* ... 其他样式保持不变 ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        #welcome-screen {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-teacher {
+            background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+        }
+        
+        .btn-student {
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+        }
+        
+        .qr-container {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            margin: 0 auto;
+            color: #6c757d;
+        }
+        
+        .player-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .player-item {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-left: 4px solid #2575fc;
+        }
+        
+        .question-container {
+            margin: 20px 0;
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2575fc;
+        }
+        
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .leaderboard {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+        
+        .leaderboard li {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .leaderboard .rank {
+            font-weight: bold;
+            color: #2575fc;
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: #2575fc;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #2575fc;
+        }
+        
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature {
+                min-width: 100%;
+            }
+        }
+        
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #2575fc;
+            margin: 0 5px;
+        }
+        
+        .url-box {
+            background: #f8f9fa;
+            color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 欢迎页面 -->
-        <div id="welcome">
-            <h1>单词挑战赛 · 多人版</h1>
-            <p class="subtitle">扫描二维码，与同学一起挑战单词测试！</p>
-            <button id="teacher-btn">我是老师</button>
-            <button id="student-btn">我是学生</button>
-        </div>
-
-        <!-- 老师设置页面 -->
-        <div id="teacher-setup">
-            <h1>创建游戏房间</h1>
-            <div class="share-info">
-                <p>让学生扫描下方二维码加入游戏</p>
-                <div class="qr-container">
-                    <div id="qrcode" class="qr-placeholder">
-                        <div>正在生成二维码...</div>
+        <header>
+            <h1><i class="fas fa-language"></i> 单词挑战赛</h1>
+            <p class="subtitle">多人互动单词测试平台</p>
+        </header>
+        
+        <div class="content">
+            <!-- 欢迎屏幕 -->
+            <div id="welcome-screen" class="screen">
+                <div class="card">
+                    <h2>欢迎来到单词挑战赛</h2>
+                    <p>这是一个专为英语学习者设计的互动单词测试平台，支持多人同时参与。</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature">
+                            <i class="fas fa-qrcode"></i>
+                            <h3>扫码加入</h3>
+                            <p>老师生成二维码，学生扫码即可参与</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-gamepad"></i>
+                            <h3>多样题型</h3>
+                            <p>包含词义选择、情境填空等多种题型</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-trophy"></i>
+                            <h3>实时排名</h3>
+                            <p>自动计算得分并生成排行榜</p>
+                        </div>
+                    </div>
+                    
+                    <button id="teacher-btn" class="btn btn-teacher"><i class="fas fa-chalkboard-teacher"></i> 我是老师</button>
+                    <button id="student-btn" class="btn btn-student"><i class="fas fa-user-graduate"></i> 我是学生</button>
+                </div>
+            </div>
+            
+            <!-- 老师设置屏幕 -->
+            <div id="teacher-screen" class="screen">
+                <div class="card">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> 创建游戏房间</h2>
+                    <p>让学生扫描下方二维码加入游戏</p>
+                    
+                    <div class="qr-container">
+                        <div id="qrcode" class="qr-placeholder">
+                            <div>正在生成二维码...</div>
+                        </div>
+                    </div>
+                    
+                    <p>或复制链接分享：</p>
+                    <div class="url-box" id="game-url"></div>
+                    
+                    <div class="player-list">
+                        <h3>已加入玩家 (<span id="player-count">0</span>)</h3>
+                        <div id="players-list"></div>
+                    </div>
+                    
+                    <button id="start-game-btn" class="btn"><i class="fas fa-play"></i> 开始游戏</button>
+                    <button id="back-to-welcome" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
+                </div>
+            </div>
+            
+            <!-- 学生加入屏幕 -->
+            <div id="student-screen" class="screen">
+                <div class="card">
+                    <h2><i class="fas fa-user-graduate"></i> 加入游戏</h2>
+                    <input type="text" id="student-name" placeholder="输入你的名字" maxlength="15" style="padding: 12px; width: 80%; max-width: 300px; border-radius: 50px; border: 2px solid #dee2e6; text-align: center; font-size: 1rem; margin: 10px 0;">
+                    <br>
+                    <button id="join-btn" class="btn"><i class="fas fa-sign-in-alt"></i> 加入游戏</button>
+                    <button id="back-to-welcome2" class="btn"><i class="fas fa-arrow-left"></i> 返回</button>
+                    
+                    <div id="waiting-message" style="display: none; margin-top: 20px;">
+                        <p>✅ 已成功加入，等待老师开始游戏...</p>
+                        <div class="player-list">
+                            <h3>已加入玩家</h3>
+                            <div id="student-players-list"></div>
+                        </div>
                     </div>
                 </div>
-                <p>或复制链接：</p>
-                <div class="url-box" id="game-url"></div>
             </div>
-            <div class="player-list">
-                <h3>已加入玩家 (<span id="player-count">0</span>)</h3>
-                <div id="players-list"></div>
+            
+            <!-- 游戏屏幕 -->
+            <div id="game-screen" class="screen">
+                <div class="progress-container">
+                    <div>题目: <span id="current-q">1</span>/20</div>
+                    <div class="timer">时间: <span id="time-left">30</span>秒</div>
+                    <div class="score">得分: <span id="current-score">0</span>/10</div>
+                </div>
+                
+                <div class="card question-container">
+                    <div id="question" class="question">问题加载中...</div>
+                    <div id="options-container" class="options"></div>
+                </div>
             </div>
-            <button id="start-game-btn">开始游戏</button>
-            <button onclick="showScreen('welcome')">返回</button>
+            
+            <!-- 结果屏幕 -->
+            <div id="results-screen" class="screen">
+                <div class="card">
+                    <h2><i class="fas fa-award"></i> 挑战结束!</h2>
+                    <p>你的最终得分是: <span id="final-score" class="score">0</span>/10</p>
+                    
+                    <h3>排行榜</h3>
+                    <ul id="leaderboard" class="leaderboard"></ul>
+                    
+                    <button id="play-again-btn" class="btn"><i class="fas fa-redo"></i> 再玩一次</button>
+                    <button id="share-btn" class="btn"><i class="fas fa-share-alt"></i> 分享游戏</button>
+                </div>
+            </div>
+            
+            <!-- 分享屏幕 -->
+            <div id="share-screen" class="screen">
+                <div class="card">
+                    <h2><i class="fas fa-share-alt"></i> 分享游戏</h2>
+                    <p>扫描二维码分享给其他同学</p>
+                    
+                    <div class="qr-container">
+                        <div id="share-qrcode" class="qr-placeholder">
+                            <div>正在生成二维码...</div>
+                        </div>
+                    </div>
+                    
+                    <p>游戏链接：</p>
+                    <div class="url-box" id="share-url"></div>
+                    
+                    <button id="back-to-welcome3" class="btn"><i class="fas fa-home"></i> 返回首页</button>
+                </div>
+            </div>
         </div>
-
-        <!-- 其他界面代码保持不变 -->
     </div>
 
     <script>
-        // 所有JavaScript代码保持不变
+        // 单词库定义
+        const wordDefinitions = {
+            border: "边界；边境",
+            circus: "马戏团",
+            cling: "紧贴；附着",
+            clown: "小丑",
+            clutch: "紧握；抓住",
+            conjurer: "魔术师",
+            creator: "创造者",
+            crossroads: "十字路口",
+            curiosity: "好奇心",
+            daze: "使眩晕；使茫然",
+            exceedingly: "非常；极其",
+            exertion: "努力；费力",
+            fortress: "堡垒；要塞",
+            grim: "严肃的；严峻的",
+            halt: "停止；中止",
+            hatred: "憎恨；厌恶",
+            intricate: "复杂的；错综的",
+            invade: "入侵；侵略",
+            irritated: "恼怒的；烦躁的",
+            joyfully: "快乐地；高兴地",
+            lift: "举起；提升",
+            lord: "君主；贵族",
+            misgivings: "疑虑；担忧",
+            nap: "小睡；打盹",
+            observant: "善于观察的；机警的",
+            overlook: "俯瞰；忽视",
+            palm: "手掌",
+            paradise: "天堂；乐园",
+            perseverance: "毅力；坚持不懈",
+            prickly: "多刺的；易怒的",
+            rank: "等级；排名",
+            resort: "度假胜地；诉诸",
+            revolve: "旋转；绕转",
+            rivalry: "竞争；对抗",
+            scold: "责骂；训斥",
+            sort: "种类；分类",
+            spin: "旋转",
+            startled: "吃惊的；受惊的",
+            stern: "严厉的；严格的",
+            stretch: "伸展；延伸",
+            sweetheart: "心上人；亲爱的",
+            tarboosh: "土耳其帽",
+            trace: "踪迹；痕迹",
+            unclouded: "晴朗的；明朗的",
+            vain: "徒劳的；虚荣的",
+            yell: "叫喊；大喊"
+        };
+
+        // 游戏状态
+        let gameState = {
+            players: [],
+            currentQuestion: 0,
+            isGameActive: false,
+            scores: {}
+        };
+
+        // 显示屏幕函数
+        function showScreen(screenId) {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('teacher-screen').style.display = 'none';
+            document.getElementById('student-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('share-screen').style.display = 'none';
+            
+            document.getElementById(screenId).style.display = 'block';
+            
+            // 如果是老师界面，生成二维码
+            if (screenId === 'teacher-screen') {
+                setTimeout(() => {
+                    generateTeacherQRCode();
+                }, 100);
+            }
+            
+            // 如果是分享界面，生成分享二维码
+            if (screenId === 'share-screen') {
+                setTimeout(() => {
+                    generateShareQRCode();
+                }, 100);
+            }
+        }
+
+        // 为老师生成二维码
+        function generateTeacherQRCode() {
+            const gameUrl = window.location.href;
+            const gameUrlElement = document.getElementById('game-url');
+            
+            // 显示URL
+            gameUrlElement.textContent = gameUrl;
+            
+            // 生成二维码
+            generateSimpleQRCode(gameUrl, 'qrcode');
+        }
+
+        // 生成分享二维码
+        function generateShareQRCode() {
+            const gameUrl = window.location.href;
+            const shareUrlElement = document.getElementById('share-url');
+            
+            shareUrlElement.textContent = gameUrl;
+            generateSimpleQRCode(gameUrl, 'share-qrcode');
+        }
+
+        // 简单的二维码生成函数
         function generateSimpleQRCode(text, elementId) {
             const element = document.getElementById(elementId);
+            
+            // 清除之前的内容
             element.innerHTML = '';
             
+            // 创建一个canvas来绘制二维码
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const size = 180;
             canvas.width = size;
             canvas.height = size;
             
+            // 绘制白色背景
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, size, size);
+            
+            // 绘制二维码样式的内容
             ctx.fillStyle = '#000000';
             
-            const data = text + '|' + Date.now();
+            // 简单的二维码模式 - 绘制方块
+            const data = text + '|' + Date.now(); // 添加时间戳确保唯一性
+            
             for (let i = 0; i < data.length; i++) {
                 const charCode = data.charCodeAt(i);
+                
+                // 根据字符代码绘制图案
                 for (let j = 0; j < 8; j++) {
                     if (charCode & (1 << j)) {
                         const x = (i * 3 + (j % 3)) * 6;
@@ -75,10 +553,12 @@
                 }
             }
             
+            // 添加定位标记
             ctx.fillRect(5, 5, 25, 25);
             ctx.fillRect(size - 30, 5, 25, 25);
             ctx.fillRect(5, size - 30, 25, 25);
             
+            // 在中间添加文字
             ctx.fillStyle = '#000000';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
@@ -87,7 +567,320 @@
             element.appendChild(canvas);
         }
 
-        // ... 其余所有JavaScript函数和事件监听器保持不变 ...
+        // 更新玩家列表
+        function updatePlayersList() {
+            const playersList = document.getElementById('players-list');
+            const studentPlayersList = document.getElementById('student-players-list');
+            const playerCount = document.getElementById('player-count');
+            
+            playerCount.textContent = gameState.players.length;
+            
+            playersList.innerHTML = '';
+            studentPlayersList.innerHTML = '';
+            
+            gameState.players.forEach(player => {
+                const playerElement = document.createElement('div');
+                playerElement.className = 'player-item';
+                playerElement.innerHTML = `<span>${player.name}</span><span>等待中...</span>`;
+                playersList.appendChild(playerElement);
+                
+                const studentElement = playerElement.cloneNode(true);
+                studentPlayersList.appendChild(studentElement);
+            });
+        }
+
+        // 生成随机题目
+        function generateQuestions() {
+            const words = Object.keys(wordDefinitions);
+            const questions = [];
+            const selectedWords = [];
+            
+            // 随机选择20个单词
+            while (selectedWords.length < 20) {
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                if (!selectedWords.includes(randomWord)) {
+                    selectedWords.push(randomWord);
+                }
+            }
+            
+            selectedWords.forEach(word => {
+                const definition = wordDefinitions[word];
+                const otherWords = words.filter(w => w !== word);
+                
+                // 随机决定题型：50%选择题，50%填空题
+                if (Math.random() > 0.5) {
+                    // 选择题 - 词义选择
+                    const options = [word];
+                    while (options.length < 4) {
+                        const randomWord = otherWords[Math.floor(Math.random() * otherWords.length)];
+                        if (!options.includes(randomWord)) {
+                            options.push(randomWord);
+                        }
+                    }
+                    
+                    // 随机打乱选项顺序
+                    for (let i = options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [options[i], options[j]] = [options[j], options[i]];
+                    }
+                    
+                    const correctIndex = options.indexOf(word);
+                    
+                    questions.push({
+                        type: 'choice',
+                        question: `"${definition}" 对应的英文单词是？`,
+                        options: options,
+                        correct: correctIndex,
+                        answer: word
+                    });
+                } else {
+                    // 填空题 - 情境填空
+                    const sentences = {
+                        border: "The river forms the natural <span class='blank'></span> between the two countries.",
+                        circus: "Children love to see the animals and acrobats at the <span class='blank'></span>.",
+                        cling: "The wet shirt will <span class='blank'></span> to your skin.",
+                        clutch: "She had to <span class='blank'></span> the railing to avoid falling.",
+                        conjurer: "The <span class='blank'></span> made a rabbit appear from his hat.",
+                        creator: "As the <span class='blank'></span> of this invention, he became famous.",
+                        crossroads: "At the <span class='blank'></span>, you need to turn left.",
+                        curiosity: "Her <span class='blank'></span> led her to explore the mysterious cave.",
+                        daze: "The bright lights will <span class='blank'></span> the drivers at night.",
+                        exceedingly: "The movie was <span class='blank'></span> boring and I fell asleep.",
+                        exertion: "After the <span class='blank'></span> of climbing the mountain, he rested.",
+                        fortress: "The ancient <span class='blank'></span> protected the city from enemies.",
+                        grim: "His <span class='blank'></span> expression showed he was not happy.",
+                        halt: "The officer ordered the troops to <span class='blank'></span> immediately.",
+                        hatred: "She looked at him with pure <span class='blank'></span> in her eyes.",
+                        intricate: "The <span class='blank'></span> design of the jewelry amazed everyone.",
+                        invade: "The army planned to <span class='blank'></span> the neighboring country.",
+                        irritated: "The constant noise made him feel <span class='blank'></span>.",
+                        joyfully: "The children <span class='blank'></span> played in the park.",
+                        lift: "Can you help me <span class='blank'></span> this heavy box?",
+                        lord: "The <span class='blank'></span> of the castle welcomed his guests.",
+                        misgivings: "I have some <span class='blank'></span> about this plan.",
+                        nap: "I usually take a short <span class='blank'></span> after lunch.",
+                        observant: "An <span class='blank'></span> person notices small details.",
+                        overlook: "From this hill, you can <span class='blank'></span> the whole valley.",
+                        palm: "He held the small bird in the <span class='blank'></span> of his hand.",
+                        paradise: "The tropical island was like <span class='blank'></span> on earth.",
+                        perseverance: "With great <span class='blank'></span>, she finally succeeded.",
+                        prickly: "Be careful with that <span class='blank'></span> cactus.",
+                        rank: "He achieved the highest <span class='blank'></span> in the army.",
+                        resort: "We went to a beach <span class='blank'></span> for our vacation.",
+                        revolve: "The planets <span class='blank'></span> around the sun.",
+                        rivalry: "There is strong <span class='blank'></span> between the two teams.",
+                        scold: "Mother will <span class='blank'></span> you if you break the vase.",
+                        sort: "What <span class='blank'></span> of music do you like?",
+                        spin: "The dancer began to <span class='blank'></span> around gracefully.",
+                        startled: "The loud noise <span class='blank'></span> the sleeping baby.",
+                        stern: "The teacher gave us a <span class='blank'></span> warning.",
+                        stretch: "You should <span class='blank'></span> your muscles before exercise.",
+                        sweetheart: "He called his wife his <span class='blank'></span>.",
+                        tarboosh: "He wore a traditional red <span class='blank'></span> on his head.",
+                        trace: "There was no <span class='blank'></span> of the missing documents.",
+                        unclouded: "We enjoyed the picnic under an <span class='blank'></span> sky.",
+                        vain: "He tried in <span class='blank'></span> to repair the broken watch.",
+                        yell: "Don't <span class='blank'></span> at me, I can hear you perfectly."
+                    };
+                    
+                    const sentence = sentences[word] || `The word "${word}" means ${definition}.`;
+                    const wrongWords = otherWords.filter(w => sentences[w]).slice(0, 3);
+                    const allOptions = [word, ...wrongWords];
+                    
+                    // 随机打乱选项顺序
+                    for (let i = allOptions.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+                    }
+                    
+                    const correctIndex = allOptions.indexOf(word);
+                    
+                    questions.push({
+                        type: 'fill',
+                        question: sentence,
+                        options: allOptions,
+                        correct: correctIndex,
+                        answer: word
+                    });
+                }
+            });
+            
+            return questions;
+        }
+
+        // 单人游戏变量
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        let questions = [];
+
+        // 开始单人游戏
+        function startSinglePlayerGame() {
+            questions = generateQuestions();
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            clearInterval(timer);
+            timeLeft = 30;
+            document.getElementById('time-left').textContent = timeLeft;
+            
+            if (currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+            
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('question').innerHTML = currentQuestion.question;
+            document.getElementById('current-q').textContent = currentQuestionIndex + 1;
+            document.getElementById('current-score').textContent = score;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function handleTimeout() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            options[currentQuestion.correct].classList.add('correct');
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function checkAnswer(selectedIndex) {
+            clearInterval(timer);
+            const currentQuestion = questions[currentQuestionIndex];
+            const correctIndex = currentQuestion.correct;
+            const options = document.querySelectorAll('.option');
+            
+            options[correctIndex].classList.add('correct');
+            if (selectedIndex !== correctIndex) {
+                options[selectedIndex].classList.add('incorrect');
+            } else {
+                score += 0.5; // 每道题0.5分，总共10分
+                document.getElementById('current-score').textContent = score;
+            }
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function endGame() {
+            // 保存成绩
+            let leaderboard = JSON.parse(localStorage.getItem('wordGameLeaderboard')) || [];
+            const playerName = gameState.players[0]?.name || '玩家';
+            
+            leaderboard.push({ 
+                name: playerName, 
+                score: score,
+                date: new Date().toLocaleDateString()
+            });
+            
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10);
+            localStorage.setItem('wordGameLeaderboard', JSON.stringify(leaderboard));
+            
+            // 显示结果
+            document.getElementById('final-score').textContent = score;
+            
+            const leaderboardElement = document.getElementById('leaderboard');
+            leaderboardElement.innerHTML = '';
+            leaderboard.forEach((player, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span><span class="rank">${index + 1}.</span> ${player.name}</span><span class="score">${player.score}/10</span>`;
+                leaderboardElement.appendChild(li);
+            });
+            
+            showScreen('results-screen');
+        }
+
+        // 事件监听器
+        document.getElementById('teacher-btn').addEventListener('click', function() {
+            showScreen('teacher-screen');
+        });
+
+        document.getElementById('student-btn').addEventListener('click', function() {
+            showScreen('student-screen');
+        });
+
+        document.getElementById('back-to-welcome').addEventListener('click', function() {
+            showScreen('welcome-screen');
+        });
+
+        document.getElementById('back-to-welcome2').addEventListener('click', function() {
+            showScreen('welcome-screen');
+        });
+
+        document.getElementById('back-to-welcome3').addEventListener('click', function() {
+            showScreen('welcome-screen');
+        });
+
+        document.getElementById('join-btn').addEventListener('click', function() {
+            const studentName = document.getElementById('student-name').value.trim();
+            if (studentName) {
+                gameState.players.push({
+                    id: Date.now().toString(),
+                    name: studentName,
+                    score: 0
+                });
+                updatePlayersList();
+                document.getElementById('waiting-message').style.display = 'block';
+            } else {
+                alert('请输入你的名字！');
+            }
+        });
+
+        document.getElementById('start-game-btn').addEventListener('click', function() {
+            if (gameState.players.length > 0) {
+                showScreen('game-screen');
+                startSinglePlayerGame();
+            } else {
+                alert('请等待至少一名玩家加入！');
+            }
+        });
+
+        document.getElementById('play-again-btn').addEventListener('click', function() {
+            showScreen('game-screen');
+            startSinglePlayerGame();
+        });
+
+        document.getElementById('share-btn').addEventListener('click', function() {
+            showScreen('share-screen');
+        });
+
+        // 初始化
+        showScreen('welcome-screen');
     </script>
 </body>
 </html>
